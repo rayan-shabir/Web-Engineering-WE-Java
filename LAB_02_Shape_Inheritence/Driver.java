@@ -85,7 +85,7 @@ class Triangle extends TwoDimensionalShape {
     }
 }
 
-public class Lab_02_Shape_Inheritence {
+public class Driver {
     public static void main(String args[]) throws Exception {
         Circle c = new Circle();
         Square s = new Square();
