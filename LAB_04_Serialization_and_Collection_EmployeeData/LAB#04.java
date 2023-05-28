@@ -188,7 +188,7 @@ class Employee implements Serializable {
 
 
 // DRIVER CLASS
-public class LAB#04 {
+public class Driver {
     public static void main(String args[]) throws Exception {
         ArrayList<Employee> AL = new ArrayList<Employee>();
 
