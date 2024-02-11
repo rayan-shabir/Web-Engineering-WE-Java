@@ -1,0 +1,217 @@
+/*
+Multi-Tasking :: To do multiple tasks / activities within a computer
+
+Multi-Threading:: To do multiple process within an application / program.
+
+Thread ::
+=============
+-> is a light weight process
+-> used for concurrent execution (At the same time multiple threads are executing in your CPU)
+-> simple sequential flow of control within a program (execute code line by line)
+
+=> BENEFIT of THREAD :: share the adress-space of parent process. (Memory utilizaation in optimal way).
+
+Adress Space :: Area in RAM which one process wants for it's execution.
+
+JAVA provide us built-in support of Multi-Threading. Java is the 1st programming language who provide Multi-Threading support.
+built-in :: when language launched , these things are provided already.
+bolted-on :: As per requirement / need these things are implemented later on.
+
+=> PROBLEMS with THREADS :: 
+* Starvation        (Same thread is executing again & again)
+* Deadlock          (Multiple processes wait for each other for the completion of their execution.)
+So, we need to tackle these problems.
+
+
+=> The Threads which we create are user-level thread.       (maps)             And the Threads which executes on CPU are OS level threads.
+-> Basically, OS maps our user-level Threads with the OS level Threads, and then OS level threads executes on CPU.
+
+# How this execution will done on CPU, in which order?
+-> JVM provide some priorities (1 - 10) priority
+-> Thus, in JAVA the user level threads have priority (1 - 10).
+'1' means Minimum priority.
+'5' means Normal priority.
+'10' means Highest priority.    (The thread with this priority will executes first)
+
+* If multiple threads have same priority, then OS will randomly choose anyone and executes that until unless any specific algo is not implemented on it like FIFO etc.
+
+-> By default, when user level thread is created (new born)  ->  it has same priority as it's parent thread.
+-> Java Virtual Machine is responsible to map these user level threads to system level threads.
+-> each OS has its own compatible JVM
+JDK -> JVM
+NT -> 7  (total priority levels)
+Solaris -> 2^32 - 1  (total priority levels)
+
+=> By default in java, '1' thread is automatically created, which is known as 'Main Thread'. (JVM creates this main thread). This Main thread executes our Main function.
+Main Thread is created when we execute our Java program, Main thread is parent of all the threads. All other threads are created by Main Thread.
+
+Main Thread -> main() -> t1, t2, t3
+
+-> To get name, priority and other information of a thread.
+System.out.println(Thread.currentThread())      // Thread is java built-in class, and .currentThread() is it's static method. It shows information of current thread.
+
+
+=> How to create threads in JAVA?
+ ways:
+
+# Using an interface :: (implement Runnable interface, this interface exists in java.lang. package.)
+-----------------------------------------------------------------------------------------------------
+* This, Runnable interface has 1 abstract function -> run()   (So, now it is resposibility of worker class to provide it's implementation.)
+This run() function is control entry point of the threads.
+class Worker implements Runnable {
+
+        // override run()   -> control entry point of thread
+}
+
+// creating object of Thread class. (Thread class object is used for creating thread.)
+
+// creating thread (born state)
+Thread t = new Thread(new Worker())             // This Thread class is also available in java.lang package.
+                    // here we are passing the object of class which implements Runnable. It is used to define that where is the control entry point for 't' Thread.
+
+// for execution of thread
+t.start();              // (READY QUEUE) sending thread for execution purpose, but it does not mean that it imidiately gets the CPU.
+
+
+# Using a class :: (Inherits your class from Thread class)
+------------------------------------------------------------
+* This, Thread class has 1 function with empty body -> run()   (So,override this run() function in our class.)
+This run() function is control entry point of the threads.
+class Worker extends Thread {
+    // override run()       -> control entry point of thread
+}
+
+// create object of our class
+Worker t = new Worker();        // Here thread is creating by going into run()
+
+t.start();              // Here our thread is ready to execute. Wait for CPU availability. (Here our thread 
+                            is in READY QUEUE).
+
+
+===> Setting priotiy of our thread, by ourselves
+# When Main thread is created, it is created by default NORMAL PRIORITY (5)
+t1  -  5
+t2  -  5
+
+-> All the child threads which are created by the main thread, having also normal priority at start. (Bcz Parent priority inherits in child also at start.)
+
+=> To change / set priority by ourselfs
+t1.setPriority(int 1 - 10)
+
+JAVA also provide us some STATIC VARIABLE to set priority... (These 3 are static integer variables in Thread class.)
+Thread.MIN_PRIORITY             ->   1
+Thread.MAX_PRIORITY             ->   10
+Thread.NORM_PRIORITY            ->   5
+
+So: both are same
+t1.setPriority(1);      OR      t1.setPriority(Thread.MIN_PRIORITY)
+
+
+t.setName();            -> is used  to set Name of thread.
+
+
+NOTE:: (IN CASE OF SINGLE CPU)
+if we set a thread like : t1.setPriority(Thread.MAX_PRIORITY) and it is a big process, then it will execute always and no other process get the chance to execute.
+So here Starvation occurs.
+To avoid starvation:: we sleep this hight priority thread for some time, so that in this sleep, other threads also get chnace to excute.
+
+sleep(int milliseconds);
+t1.sleep(1000);    -> non-busy waiting. / efficient waiting.
+
+=> Fow which thread we write sleep OR How do we know when to sleep a thread?
+ANS:: Whenever we are making a high priority thread, we always  call sleep (him) for some time, So that in this time other threads got chance to execute.
+
+# REMEMBER :: 
+-> sleep() function can throw CHECKED Exception   ->   InterruptedException.
+So, we must have to deal InterruptedException, whenever we are using sleep() function. Otherwise our code will not compile.
+Thus,
+try {
+    Thread.sleep(1000);         // bcz we are calling this sleep function with some external resource. Thus, we have to implement 
+                                    try-catch block.
+} catch (InterruptedException ex) {
+
+}
+
+ORPHAN Thread :: if main thread complete it's execution, but the child thread still has to complete their execution.
+Yes, it is possible in JAVA, that main thread complete it's execution and terminate but the child threads still has some code to execute. The processes / threads whoose parent terminates but they (child) are still in memory, in this case OS provide these child a default parent 'init' process. Now, init process is responsible to complete the execution of child processes.
+=> But it is recommended to not finish / terminate the parent process untill all child threads has complete their execution.
+
+REMEMBER :: * In case of multiple CPU System, each thread go to each CPU and the execution order of processes / thread may change each time we run our program. (Bcz OS assign each thread a random CPU each time).
+
+* But, In case of sinlge CPU System, the execution order of processes / thread may remain same each time we run our program util unless the priority of all threads remain as same as we run the program 1st time.
+
+
+// When we print Thread object it display us '3' Informations ::[ Thread_name, Priority, Parent ] 
+Thread t = new Thread();
+(It is basically calling toString() function which is over ride by Thread class...)
+System.out.println("New Thread: " + t);     // Displaying Thread Information
+
+NOTE :: If we call run() function by ourself for each thread, then it means in this case only 1 process runs and that process is calling each thread individually (here one activity is performing one time), that does not mean it is is doing multi-threading.
+That's the main difference between the Thread run() & our personal function call.
+
+
+
+REMEBER :: (SIGNALING)
+---------------------------
+NOTE:: In code 'MultiThreading_Multiple_Thread.java', we use bogous approach (to wait main thread until all child complete their execution), by setting main thread sleep for 10 seconds. So that till then all the child threads can complete their execution.
+But here we can also notice that all child threads complete earlier and then after some seconds main thread terminates. Here it means that some seconds are wasting (bcz main is still in sleep state and till it's comeback the execution cannot complete), some CPU cycles are wasting in this case. 
+
+So, To save these wasting cycles of CPU, we can use SIGNALING. (Whenever all the child threads complete their execution, the main thread come immidiately without wasting any time and complete it's execution. Main thread does not wait for it's sleep time to finish so that then it can come and complete it's execution)
+
+SIGNALING / MESSAGING :: The child threads send message / signals to main thread. This message contain that the parent thread wait / stay in RAM until all child thread complete their execution. And when the child threads complete their execution then again the child thread send SIGNALS to the main thread and tell it that they had completed their execution, now main thread can execute and complete it's execution.
+(Simply, the child threads send signal at the time of their execution (flag : 0) and also send signals at the time of their termination (flag : 1) to main thread.)
+Thus, by SIGNALING we can save our wasting cycle of CPU.
+NOTE:: We can never estimate the optimal time for the completion of all child threads, thus we use signaling.
+-> if we use wait() then also CPU cycles will waste. So best way is to use signaling , and for signaling we use join().
+
+==> SIGNALING is done by 'join()'. 
+==> Remember if there are multiple child threads, then for all those child threads we have to send signal to main thread, (means for all child threads we have to generate call to join() function).
+
+
+Critical Section
+======================
+* When multiple threads try to update / change shared piece of code, then we got 'Critical Section Problem'.
+
+=>assume thread1 and thread2 shares below code:
+{
+x = 10
+x++;
+}
+(thread1 tries to update the shared 'x' and thread2 tries to read 'x' So it depends which thread execute 1st, if thread2 execute 1st then it got x = 10 value but if thread1 execute 1st then thread2 got x = 11 value.)
+* In this case, we got inconsistent results.
+
+-> How to avoid this inconsistent results? How to deal with this critical section problem?
+SOL:: We should synchronized the access of our shared code. 
+We want that when 1 process/thread is executing our shared code then no other thread can execute it, all threads wait till the execution of 1st thread whether we have 1 CPU or we have multiple CPU.
+We do this by giving lock to 1 thread, and till when 1 thread has lock only that thread execute the critical section, till then no other thread can enter in the critical section, and when it finish it's execution then it realese the lock and other thread acquire the lock and execute the critical section. (The thread which has lock will execute the critical section only.)
+-> In JAVA, by default each thread has a lock associated with it.
+
+=> To implement this task in JAVA, we use synchronized keyword with the shared piece of code. (The code which will generate the critical section problem will be identified by the synchronized keyword).
+
+The code / block which will be mentioned with the synchronized keyword, now only 1 thread can enter in that code at 1 time. Multiple thread cannot enter in that code now.
+
+synchronized 
+{
+
+}
+
+
+QUESTIONS
+-------------------------
+Q:: How to do signaling using join()?
+ANS: 
+
+
+Q:: What is the purpose of yield()? What is the difference between yield() and sleep()?
+ANS: 
+
+
+Q:: How to synchronized 3rd party code in Java?
+like ::
+public void run() {
+    obj_m.Go(msg);          // calls the Go(String msg) method of Message class with message
+}
+here in above code we want to make synchronized the calling to Go function. (NOTE:: This function does not exists in our code).
+ANS::
+*/
+

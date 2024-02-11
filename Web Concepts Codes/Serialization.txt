@@ -1,0 +1,71 @@
+/*
+Serialization:: is a process of saving the state of an object into a stream. (As, stream is connected with an end point, thus, here serialization means we are goint to write / read state of object on some file or console or computer).
+
+State of an Object :: means the value which are contained by the data memebers of object in the memory is basically the state of the object.
+
+Simply, serialization means we are going to read and write object into a stream. (means how we can read or write object from any end point like file, console, computer etc.)
+
+De-Serialization :: How we retrive the state of an object. (Means if we already  save the state of an object then how we get back this state into RAM, this process is known as De-Sreialization.) How we retrive object from file.
+
+PROCESS.
+===> In Java, How we can read or write the object direclty on to the file???
+ANS:: Remember:: In Java, the process of Serialization is automatic.
+-> The thing we need to do is::
+
+// If we need to save state of 'Person' class objects, then we need to implement / inherit it from interface Serializable. (This Serializable interface is available in java.io.*). (The class whose object's state we want to save, must provide implementation of serializable interface).
+class Person implements java.io.Serializable {
+
+}
+
+NOTE:: This Serializable interface is a Tagging interface.
+Tagging Interface :: An interface who does not have any abstract function.
+
+-> Thus, the class who implements Serializbale (Tagging) interface does not have any responsibility to implement any function, (because there is no abstract function available in Serializable interface). Thus, this Tagging (Serializbale) interface does not provide any responsibility on Person or any class who implements it.
+
+BENEFIT OF SERIALIZABLE (TAGGING) INTERFACE:: is only to provide message to your compiler, that state of the object of type (i.e Person or class who implements it) is going to be saved.
+
+
+Then, after creating class who implemets serializable interface:
+
+We use two high level streams, for reading & writing of objects:
+new ObjectInputStream(new FileInputStream("Filename.txt"));        // to read data obejct by object
+new ObjectOutputStream(new FileOutputStream("Filename.txt"));       // to write data object by object
+
+ObjectInputStream()     -> has function readObject();  for reading objects.
+return type of readObject() is 'Object', Because multiple objects can be stored in one single file. So when we read these objects, we got there type as parent type of every java class.
+Thus, we need to downcast them in appropriate type, of which it belongs to like:
+Person p = (Person) readObject();
+
+Q5:: see in the end.
+
+ObjectOutputStream()     -> has function writeObject();  for writing objects.
+
+
+NOTE:: (impt)
+If we want any data member to not save in file (as state of object).
+we can declare that data member as transient like:
+
+transient int Password;
+transient int PIN;
+
+// All those data members who are transient, there value (state) will not save in memory. They can be most probbaly Passwords, PIN code etc. But remember these transient data member are available at only your local computer, and not at other end point like file or other computer etc. So at end point like other computer the value they get for transient is default like 0 or null etc.
+
+LECTURE # 11, all questions
+
+Q5:: De-Serialization :: If available no. of objects in a file is not known.
+If we do not know how many objects are save in a file, then how until we loop to iterate all the obejcts while reading objects from file like :: f.readObject() ???
+
+ANS:: 
+
+
+Q6:: InputStreamReader?
+ANS::
+
+Q7:: PrintStream vs PrintWriter?
+ANS::
+
+
+Q8:: flush() related to streams?
+ANS::
+
+*/      

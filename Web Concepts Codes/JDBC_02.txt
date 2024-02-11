@@ -1,0 +1,240 @@
+/*
+*** Executing SELECT QUERY ***
+------------------------------------------
+
+5. Execution of our SQL Query:
+=> Statement object has a functions for the execution of SELECT query.
+
+Resultset rs = st.executeQuery("SQL");     // belongs to "Select" query, it returns object of Resultset. (Resultset: the resultant Table 
+                                                                                                        data which return when our query is executed.)
+
+This Resultset object has many functions. But it has provided us 2 main functions to get the data's (values) of table.
+
+(i)  next()                 -> returns TRUE, if the next row is available for reading purpose.  
+                            -> move the cursor on the next row.
+                            Thus, we carry-on calling next() function util-unless it will return FALSE. (It return False when it will be the last row.)
+
+// We do it like this:
+
+while(rs.next()) {
+    
+}
+
+
+(ii) getter functions used to retrieve these (table) values. (As the table values we got are in tabular form i.e dataset/ resultset, thus, we have to convert/save them in appropriate format by using below getter functions.)
+
+In Resultset object, we have a getter function of all types.
+Thus, we have to call apropriate getter function. 
+
+So, to retrieve the table values, we have following appropriate getter functions.
+getString();    // return string type object
+getInt();       // return int type object
+getDouble();    // return double type object
+getDate();      // return date type object
+
+Moreover, these functions are overloaded in Resultset objects.
+(We can call these functions in 2 forms. By string or integer value.)
+getString("column-name");               // Column name
+getString(num);                         // Column number (not index)
+
+
+IN CODE::
+
+while(rs.next())  // run until last row
+{
+
+    // rs.getString("ID");        // If the column name is 'ID'.
+    // OR   (BOTH ARE SAME, both of them retrieve the 1st column of our table.)
+    // rs.getString(1);            // Column Number (if our table has ID column as it's 1st column.)
+
+    // So to get all columns of table we do like : (But, Here we got that row value where our index/cursor is pointed.)
+    id = rs.getString("ID");
+    name = rs.getString("Name");
+    city = rs.getString(3);
+    ph = rs.getString("Phone");
+
+
+}
+
+/*
+-> This resultset also exists in java.sql.
+-> Basically the built-in package java.sql provide us only interfaces, and the implementation of these interfaces are provided by each DBMS vendor, So by default these methods/functions are available in java.sql package, but their actual implementation is provided by JDBC vendor. So we need to add/use both of them (java.sql & JDBC vendor)
+*/
+
+NOTE:: (Resultset object)
+------------------------------
+-> This resultset object is by default work upon;
+   + Forward only (Top to Bottom)       // We cannot go on previous row by this.
+   + Read-Only                          // We can only retrieve these value, we cannot modify these values.
+
+By default ResultSet object type:   TYPE_FORWARD_ONLY    -> means only go next row below, and also we cannot update any row data.
+ 
+* As, when we run the query, it will load this resultset / dataset in memory. (Means copy of database table will load in memory).
+
+
+-> But if we want to change resultset default nature;
+    + We want to go bottom to top, OR we want to go from any row to any other row.
+    + We want to modify / update any row information/value.
+    (* These updations will 1st done in data which exists in RAM. Then we somehow update it in our DB table.)
+
+# Thus, to achieve the above process (to move bottom to top row or from any row to any other row, or to update any row info), we do the following:
+* We use 2 static variables of Resultset object.
+
+
+ResultSet.TYPE_SCROLL_INSENSITIVE           // If we define this variable in our statment object, then our ResultSet object will be able
+                                                to move forward as well as backward.
+* After setting above (scroll) variable, we use:
+rs.previous();                          // means we go/move to the previous row.
+rs.last();                              // means we go/move to the last row.
+rs.first();                             // means we go/move to the first row.
+rs.absolute(int row-number);            // means we go/move to the specific row. (If we pass here '2', it will move the cursor to 2nd row)
+
+
+
+ResultSet.CONCUR_UPDATABLE             // If we set this variable in our statement object, then we are able to update any of our row data.
+
+* After setting above (update) variable, we use:
+=> This function is used to update row info of copy of resultset which is present in RAM (not direclty in DB Table)
+rs.update______("column", "value");          // GENERIC
+
+* To implement update changes in DB also.
+rs.updateRow();
+
+For updating "Name" column which has string type. (This function is also overloaded, thus, we can use column name as well as column number).
+rs.updateString("Name", "Rayan");      // column-name
+// OR (both are same)
+rs.updateString(2, "Rayan");           // column-no.
+
+
+
+
+------------------------------------------------------
+PRE - COMPILED QUERY :: (To achieve EFFICIENCY)
+------------------------------------------------------
+SCENERIO :: To Insert data of all class students (i.e 60 students) in DB Table.
+
+insert into table-name (rollNo, name, phone) values ('BSITF20M535', 'Rayan', 12345);
+insert into table-name (rollNo, name, phone) values ('BSITF20M527', 'Mujab', 54321);
+insert into table-name (rollNo, name, phone) values ('BSITF20M512', 'Bilal', 67890);
+- - - - - - 
+- - - - - -
+- - - - - -
+* So, for 60 students we have to write this same query again and again, by only changing the students credentials.
+Then, to execute.
+
+executeUpdate(SQL);             // Also need to run this function 60 times. (for each students).
+
+
+
+SQL = "insert into table-name (rollNo, name, phone) values ('BSITF20M535', 'Rayan', 12)";
+executeUpdate(SQL);      // This function will send the above query to DBMS, DBMS 1st compile this query then execute it.
+
+# DBMS 1st compile our query (and check for syntax errors), if there is no (suntax) errors, then DBMS runs our query.
+=> As our query is just a string in JAVA. So, if this query has any syntax-errors, JAVA will not report us. But when we send this query to our DBMS, then DBMS will report an error. (Basically SQL Statement error is DBMS error, not JAVA error.)
+
+SQL = "inrt into table-name (rollNo, name, phone) values ('BITF20M535', 'Rayan', 12)";
+executeUpdate(SQL);      // DBMS generate an ERROR: UNKNOWN Insert
+
+
+
+-> NOTE:: If we send our query 50 times to DBMS, then DBMS compile our query 50 times then run 50 times.
+Means if our query is correct, and we are only changing students credentials, then still by above scenerio our query will compile 60 times. (means compile again and again, whether we are passing diff values of students credentials).
+
+==> Thus, to execute the same query (which has same syntax only values/data are changing) multiple times in DBMS. 
+This query compile once and execute multiple time for each different data/values (we don't need to compile it again & again).
+*** Compile our Query once and execute our this pre-compiled query again & again with diff values. ***
+
+# For this pre-compiled query, JAVA provide us an object with name of 'preparedStatement'
+We use this preparedStatement if we want to save our query in pre-compiled form. (Compiled once & execute/run again & again with diff values.)
+For pre-compiled query, the syntax of our query will be:
+
+(i)
+SQL = "insert into table-name (rollNo, name, phone) values (?, ?, ?)";
+
+(ii)
+PreparedStatement pst = con.prepareStatement(SQL);      // This function call will compile our SQL query. And we will get this compiled
+                                                            query in form of preparedStatement object.
+
+(iii)
+* As we compiled our query, but still we do not have pass/set any value to it. So, to pass/set values to our query.
+pst.set_____(column-number, "value");   // GENERIC
+
+pst.setString(1, "BITF20M535");         // we use setString bcz 'RollNo' column is of String type.
+pst.setString(2, "Rayan");              // we use setString bcz 'Name' column is of String type.
+pst.setInt(3, 12);                      // we use setInt bcz 'Phone' column is of int type.
+
+* Here we had only assigned the data. Not execute our query.
+
+(iv)
+-> So, to execute our query.
+int = pst.executeUpdate(SQL);           // Here Query will not compile, it will direclty execute on DBMS.
+
+
+
+=> We have compile & execute our query only once in above steps. So to do it multiple times i.e for 60 students.
+
+SQL = "insert into table-name (rollNo, name, phone) values (?, ?, ?)";
+
+PreparedStatement pst = con.prepareStatement(SQL); 
+
+for(i=1:60) {
+    // We can also take this data from user input.
+
+    pst.setString(1, "BITF20M535");     
+    pst.setString(2, "Rayan");
+    pst.setInt(3, 12);
+
+    int = pst.executeUpdate(SQL);          // Here Query will not compile, it will direclty execute on DBMS. Thus, we achieve EFFICIENCY.
+}
+
+NOTE::
+* If we are setting or updating a column which is set to PRIMARY_KEY, then DBMS send error to JAVA and JAVA displays that error to us.
+
+REMEMBER:
+----------
+(We have 3 diff types of Statement for execution of SQL query)
+
+In JDBC, we can execute statements from our JDBC in 3 ways.
+1. Statement                // simple sql (To execute simple SQL statements)
+2. PreparedStatement        // pre-compiled 
+3. CallableStatement        // stored procedures (set of codes/functions which are stored in DBMS). 
+                              To invoke stored procedures, we use CallableStatement.
+
+
+
+===> To get the META-DATA of Table:
+
+ResultSet rs;
+
+ResultSetMetaData rsmd = rs.getMetaData();      // it will return an object of ResultSetMetaData
+
+# ResultSetMetaData has multiple functions.
+int = rsmd.getColumnCount();              // It will return total number of columns in ResultSet object.
+String = rsmd.getColumnName();              // It will return a String containing Name of the column.
+? = rsmd.getColumnType();              // It will return the type of the column.
+
+
+
+HOMEWORK 
+==============
+Q1: What is the return type of  ->  rsmd.getColumnType() ?
+? = rsmd.getColumnType();     
+ANS::
+
+Q2: To get how many "No. of rows" we got on behalf of query?
+ANS::
+
+
+Q3: When we do query from DB, how we can set to get some specific amount of rows?
+Set No. of rows? Means to get only 1st 1000 rows.
+ANS::
+
+
+Q4: How we can Set execution time of query on DBMS? Means setting time on java code for how long it will wait for the response from the DBMS.
+Query execution time set time?
+ANS::
+
+
+Q5: What is Rowset?
+ANS::
+*/

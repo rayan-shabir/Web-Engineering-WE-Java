@@ -1,0 +1,130 @@
+/*
+JDBC :: (JAVA DATABASE CONNECTIVITY)
+--------------------------------------
+* We want to communicate with our DBMS (Data Base Management System) through JAVA code.
+* How we executes SQL queries thorugh Java code.
+* Java send these queries to DBMS, then DBMS executes it and send response to Java Application, then Java Application render it & give us results / display.
+
+-> DBMS avaiable today:
+* MS SQL SERVER
+* MS ACCESS
+* MYSQL
+* IBM DB2
+* Oracle
+Every DBMS has different (its own) structure of storing information. Arrangement of data is different from other databases.
+So, to communicate with any database we must have to know it's structure sor that we can easily communicate with it. 
+Thus, it means for each database we have to learn different code to communicate with each data base?
+
+* But JAVA provide us 1 GENERIC way to communicate with any database. We don't need to adopt different way to communicate with diffrent databases. We use 1 generic way to communicate with all of the databases.
+
+* Basically Java impose (inforce) some rules for each database. Which all databases must have to implement while creating their databses. Means when they deploy their DBMS to community they must have to provide some set of libraries to communicate with their databses. So, by using these libraries we (developer) can communicate with these databases.
+(Java provide some rule in form of interfaces, means to implement some classes with these interfaces [override/implement all methods of these interfaces]. So, each database provide implementation of these methods, and as each database must has implemented these methods, thus we got same implementation of all those methods which java has inforce them to implement. So, as a developer we got generic way (1 moethod) to communicate with any of the databse.)
+This, code / set of libraries according to specific DBMS which a DBMS provides is knwon as "JDBC Connector".
+This, Connector is pre compiled code. We don't need to compile it.
+
+JDBS Connector / APIs / Libraries / some code       -> is required for communicating with DBMS. (we don't know internal structure of
+                                                            DBMS we only use this code to communciate with DBMS.)
+
+
+Thus, we can use same for code for communicating with any of the databases, only we have to change 1 line in our code, in which we write database name with which we want to communicate.
+
+==> We shoudl install bwlo softwares::
+1. MySql     (install)
+            i. port: 3306
+            ii. username: root & password: root
+
+            two steps:
+            * First wizard  -> installation
+            * Second wizard -> configuration
+
+2. GUI of MySql    ->    Sqlyog
+
+3. JDBC Connector for MySql version.  (We have to define that this connector (which we download) is for which version?)
+
+if
+MySql 5.0   -   connector v5.0
+if
+MySql 8.0   -   connector v8.0
+
+* To bring this connector / code in our scope, we have to set CLASSPATH varibale.
+CLASSPATH = .;D:/folder/mysql-connector-java-5.0.8-bin.jar
+
+// OR
+
+XAMP / LAMP/ WAMP      ->     phpMyAdmin
+
+-> PURPOSE OF THESE ALL IS SAME;
+* appache -> web server;  * windows -> Operatin system;   * Mysql -> DBMS
+
+WAMP :  combo of Window, Appache, Mysql, Php
+
+LAMP :  combo of Linux, Appache, Mysql, Php
+
+XAMP: 
+
+
+====> How we communicate with MYSQL Database?
+====> How we execute query with Database in Java? How we do connectivity with Database in Java? (Connection, Query execution, Deal Exceptions.)
+STEPS: (For communicating with any of the DBMS)
+--------------------------------------------------------------
+1. import java.sql
+
+2. load driver   (Here we tell with which DBMS we are going to communicate.)
+
+Class.forName("Driver Name");        -> 'Class' is name of class not a keyword, and forName is it's static function. 
+                                        like ::  class Class {
+                                                 }
+-> For mySql DBMS :: (com.mysql.jdbc.Driver     ->   Name of mysql Driver)
+Class.forName("com.mysql.jdbc.Driver");      // Here we give, Driver whose compatible DMBS we want to communicate. (Driver string for
+                                                                                                                    MySql)
+-> For MS Access DBMS :: (new.ucanaccess.jdbc.UcanaccessDriver     ->   Name of MS Access Driver)
+Class.forName("new.ucanaccess.jdbc.UcanaccessDriver");      // Driver string for MS Access   
+
+-> For Oracle DBMS :: (oracle.jdbc.OracleDriver     ->   Name of Oracle Driver)
+Class.forName("oracle.jdbc.OracleDriver");          // Driver string for Oracle
+
+
+3. Create Connection::
+Connection con = DriverManager.getConnection("URL", "username", "password");         // Information which we give at creation of DBMS. 
+-> If the information is correct, It creates connection and returns an object of Connection class. But is information is wrong it returns an exception. This 'EXCEPTION' is Sql exception.
+
+-> URL: adress where our DBMS runs, i.e localhost, IP of other computer etc.
+-> Username & password: name of our DBMS and password.
+
+like:: (FOR MYSQL DBMS)
+=> (If DBMS is in our Local Machine)
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db-name", "root", "root");
+// OR
+Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db-name", "root", "root");          // if PORT is default then it is
+                                                                                                        our choice to write it or not.
+=> (If DBMS is in other Computer)
+Connection con = DriverManager.getConnection("jdbc:mysql://IP-adress:PORT/db-name", "root", "root");
+
+
+(FOR MS ACCESS DBMS)
+Connection con = DriverManager.getConnection("jdbc:ucanaccess://localhost:3306/db-name", "root", "root");
+(FOR ORACLE DBMS)
+Connection con = DriverManager.getConnection("jdbc:oracle://localhost:3306/db-name", "root", "root");
+
+
+4. create Statement Object (used for Execution of SQL Query):
+(We have 3 diff types of Statement for execution of SQL query; SEE file : JDBC_02.txt)
+
+-> For Execution of simple SQL Query.
+Statement st = con.createStatement();
+
+
+5. Execution of our SQL Query:
+=> Statement object has 2 functions for the execution of query.
+
+Resultset rs= st.executeQuery("SQL");     // belongs to "Select" query, it returns object of Resultset. (Resultset: the resultant Table 
+                                                                                                        data which return when our query is executed.)
+
+int val = st.executeUpdate("SQL");    // belongs to "Insert / update / delete" i.e DML query. It returns an integer type value, it tells 
+                                                                                                how many no. of records are updated.
+
+6. con.close();
+
+7. Handle Checked Exception: SQLException. (Whenever we are communicating with external resource we have to handle checked execptions.)
+
+*/

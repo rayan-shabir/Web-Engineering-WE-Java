@@ -1,0 +1,146 @@
+/*
+SOCKET PROGRAMMING::
+-----------------------
+-> How two different computers communicate over the network.
+-> Two different computers read / write data over the network, by uing some protocols.
+
+Protocols :: (set of Rules to follow for the communication)
+* For different type of operations, we need implementation of different types of protocols.
+=> Web Base communication           ->    HTTP protocols
+=> File Transfering                 ->    FTP protocol
+=> Email send & receive             ->    SMTP protocol
+=> Chat Application (Text sharing)  ->    TCP / IP protocol  or UDP protocol
+
+SOCKET :- Is an end-point of two-way communication,
+          between two different programs running on the computers,
+          (connected) over the network.
+
+=> We use TCP / IP protocol here for the communication of two diff computers.
+* TCP / TP    ->   Connection Oriented, send (move) data in form of BYTES, in order deliever (means data will deleiver in same format in which it is send).
+
+* UDP     -> Connection less, packets, unreliable (non order deleivery)
+
+STREAMS -> communicate with file ( abstraction of hard drive)
+STREAMS -> communicate with socket (abstraction of network)
+
+
+=> HOW THIS SOCKET PROGRAMMING DONE IN JAVA?
+Java provide us two diff types of sockets.
+* serverSocket / Service socket.
+* Socket       / Communication Socekt
+
+
+PORT :: specific point where all the sockets are binded. (Point where server listens to the client). PORT is a logical point not actual one, and this point is created by our computer.
+Socket in running on some point, this point is called PORT.
+
+Service Socekt provides some service and this service socket is bounded with some port. This service socket is basically some program which listens to the client request on this port at which it is connected.
+If request of client is accepted by SERVICE SOCEKT, then this SERVER SOCKET creates a new COMMUNICATION SOCKET and redirect/forward the client reuqest to that newly created COMMUNICATION SOCKET . This process repeats when a new client also comes. Thus, for each client it will create a new COMMUNICATION SOCKET, and redirect that client to that socket.
+The SERVICE SOCEKT does not iteself read or write (communicate) with any client because if it do so then it will be busy (bound with one client) and can't listen to any other client.
+* Newly created COMMUNICATION SOCKET actually communicates (read / write) with the client, thus this newly created socket is known as "COMMUNICATION SOCKET". These COMMUNICATION SOCKETS are also known as "CLEINT SOCKET" (bcz they are link / communicate with the client.)
+ 
+* These Service Sockets provide us the implementation of TCP / IP protocols.
+
+
+===> WHICH SUPPORT IS PROVIDED BY JAVA TO CREATE THESE SOCKETS?
+JAVA provide us complete package    ->   java.net     (This package has all the socket classes, by using which we can communicate 
+                                                        diff computers over the network.)
+                                        java.io       (This provide us STREAMS support. For reading & writing of data.)
+
+
+
+==================================================================================================================================
+=> Steps For Creating Server: (Which will provide services, which will host)
+SERVER
+------------
+java.io
+java.net
+
+1. create Server Socket using ServerSocket class: (it accepts port number, at which point we want to run this socket)
+ServerSocket SS = new ServerSocket(int port)   >  1024 
+
+ServerSocket SS = new ServerSocket(1030)
+(It is Suggested that we should use port > 1024 bcz all the ports below this are busy somewhere already. As, 1 port can only be assign to 1 socket / service, So to avoid this overlapping we assign port > 1024. But is is not necessary)
+
+
+2. Socket S = SS.accept();         // BLOCKED; Waiting for the client request. (When control comes here, the control will block. It will 
+                                                                                wait for client request. When client comes it create a new (communication) socket and assign that socket to Socket s instance.)
+
+3. STREAMS:
+s.getInputStream() / s.getOutputStream();       // InputStream / OutputStream are functions of Communication Socket class. Ans it will
+                                                    return Output/Input Stream type refernce variable. Then, we will wrap this return abstract class's Input/output Stream type reference instance to appropriate type i.e PrintStream, Buffered Stream etc.
+                                                    InputStream / OutputStream    <->      s.getInputStream() / s.getOutputStream();
+
+
+4. reading / writing (same as we do in file)
+
+5. close streams & scokets.
+
+6. Exceptions (When we build connection with external resource, we must have to handle CHECKED Exception.)
+
+
+
+
+------------------
+=> Steps For Creating Client: (Which will communicate with other computer)
+CLIENT
+------------
+java.io
+java.net
+
+1. client will send request to the server (other computer)
+Socket SS = new Socket(IP, PORT)        // This IP adress will be static, and must be known to our client.
+
+(We will give IP of server, where actually our service is running (with which service socket we want to communicate), that service socket is listening on some port, so we also give that port). 
+Socket S = new Socekt("192.168.2.121", 25);
+
+If that server / service is local (itself our computer) then we do like::
+Socket S = new Socekt("localhost", PORT);
+//OR 
+Socket S = new Socekt("127.0.0.1", 25);
+
+
+2. STREAMS:
+S.getInputStream() / S.getOutputStream();       // InputStream / OutputStream are functions of Communication Socket class. Ans it will
+                                                    return Output/Input Stream type refernce variable. Then, we will wrap this return abstract class's Input/output Stream type reference instance to appropriate type i.e PrintStream, Buffered Stream etc.
+                                                    InputStream / OutputStream    <->      S.getInputStream() / S.getOutputStream(); 
+
+4. reading / writing (same as we do in file)
+
+5. close streams & scokets.
+
+6. Exceptions (When we build connection with external resource, we must have to handle CHECKED Exception.)
+
+
+
+(We cannot communicate with that computer whoose IP or port we do not know).
+
+========================================================================================================================================
+
+HTTP -> port : 80
+FTP -> port : 23
+TELNET -> port : 28
+SMTP -> port : 25
+MYSQL DB -> port : 3306
+SQL Server -> PORT : 8080
+
+
+FOR COMMUNICATE WITH THE SERVICE ON YOUR LOCAL COMPUTER          ->    We have to identify: PORT only.
+FOR COMMUNICATE WITH THE SERVICE ON SOME OTHER COMPUTER          ->    We have to identify: ADRESS (IP or MAC) + PORT . (BANK EXAMPLE)
+
+NOTE :: 1 service can run on 1 port at 1 time.
+
+HOMEWORK::
+============
+Q:: How many TCP / IP connections we can open on 1 single sytem / computer?
+ANS::
+
+
+Q:: How we can create a multi-threaded server?
+ANS::
+
+Q:: How we can get the port of newly created communication socket? How we got the local port?
+ANS::
+
+Q:: How one computer got the port of communication socket of other computer? How we got remote Port?
+ANS::
+*/

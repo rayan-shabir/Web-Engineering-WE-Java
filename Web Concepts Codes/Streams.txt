@@ -1,0 +1,94 @@
+/*
+
+Streams :: It provide us Generic way (Abstraction layer) to communicate with any (different) end point.
+->  Path / channel to read / write with any end point.
+-> Path / channel between source code and end point to read and write data.
+
+End Point -> file, socket, console.
+
+=> JAVA provide us some built-in libraries, which are based on streams  for reading and writing data with end point (file, socket, console etc.)
+
+* All these built-in libraries are available in the package i.e java.io. Thus, if we want to read with any end point, we must require to import this package first.
+
+=> We can classify these Libraries / Streams into two (2) categories:
+# w.r.t Data
+# w.r.t Functionality
+
+
+=>=> W.R.T DATA
+----------------------
+    * Byte :: Read or Write data in form of Byte. 
+    -> It is based on ASCII. (ASCII -> 8 bit : each characrter need 1 byte for storage ; ASCII supports limited characterset (only American style symbols are supported))
+    -> given in JDK 1.0
+
+
+    * Char :: Reda or Write data in form of Characters.
+    -> It is based on UNICODE (UNICODE -> 16 bit : each characrter need 2 byte for storage ; UNICODE supports all symbols which are used all over the world.)
+    -> Internationalization
+    -> given in JDK 1.1
+
+
+    
+=>=> W.R.T FUNCTIONALITY
+-----------------------------
+    * Low Level Stream (Node Stream) :: Directly communicates with our end points.
+
+    * High Level Stream (Filter Stream) :: Communicates with our low level streams.
+
+    Q: Why we do not use only low level stream for read / write data from end points ??
+    ANS:: -> High level stream provides extra functionality to our low level Streams.
+    Extra functionality like:: i) Buffering, It (High level stream) takes data from low level streams and store it (data) in buffer and when this buffer will full, high level stream will display it and again do this process.
+    ii) Compression 
+    iii) Encoding - Decoding of code
+
+    * All these functionalities will be done at high level stream.
+
+-> JAVA provides us most of the libraries in this package (java.io) for the reading and writing of data.
+For reading & writing of data the classes we have are::
+
+
+
+=> For Byte Stream (read or write data in form of Byte)
+---------------------
+* Java provide us 2 Parent Abstract Classes (InputStream {For reading of data}, OutputStream {Sor writing of data})
+InputStream                                 OutputStream     
+
+* Child classes which we use
+FileInputStream  (reading)                  FileOutputStream   (writing)         -> low level stream (communicate with end point [FILE])
+BufferedInputStream                         BufferedOutputStream                 -> high level stream (communicate with low level stream)
+
+DataInputStream                             DataOutputtream         -> used to read or write primitive data types. (in form of binary)
+CyferInputStream                            CyferOutputStream       -> used for encoding / decoding of data.
+ObjectInputStream                           ObjectOutputStream     -> used to read / write data in form of objects
+
+-> NOTE:: All those Stream classes / built-in libraries which have word 'Stream' at the end of their name, we blindely say all those classes belongs to Byte Stream Category. (all these classes read or write data in form of Bytes, they are based on ASCII characterset)
+
+=> For Char Stream (read or write data in form of Characters)
+---------------------
+* Java provide us 2 Parent Abstract Classes (Reader {For reading of data}, Writer {Sor writing of data})
+Reader                                      Writer  
+
+* Child classes which we use
+FileReader                                  FileWriter                  -> low level stream (communicate with end point [FILE])
+BufferedReader                              BufferedWriter              -> high level stream (communicate with low level stream)
+
+-> NOTE:: All those Stream classes / built-in libraries which have word 'Reader' or 'Writer' at the end of their name, we blindely say all those classes belongs to Char Stream Category. (all these classes read or write data in form of characters, they are based on UNICODE characterset)
+
+===> In all the above classes, we have functions of reading and writing:
+Reading     ->      read()    byte by byte OR character by character
+Writing     ->      write()   byte by byte OR character by character
+
+These functions are defined in Abstract Parent Classes, and are overloaded / implemented in child classes.
+
+
+LECTURE # 11, all questions
+
+Q1:: How to open a file in append mode?
+ANS::
+
+Q2:: Why not checking -1, in case of .readLine()?
+ANS::
+
+
+=> Further questions are in Collection_Objects.txt file.
+*/
