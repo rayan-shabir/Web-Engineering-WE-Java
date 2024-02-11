@@ -1,0 +1,149 @@
+/*
+ERROR TYPES:
+-> Syntax error :   does not follow language rules
+                    compile time error.
+
+-> Logical error :  logic is not correct
+                    debugging
+
+-> Runtime error :  process an operation which is impossible to implement.
+                    These Run time errors are called 'EXCEPTIONS'.
+
+                LIKE::
+                    > Arithmetic exception :: Division ; num / 0
+                    > Index Out of Bound Exception :: Arrays.length = 10 (0-9) and we try to access arr[10] or arr[11] etc.
+                    > program ; file reading / writing
+                    file does not exists or do not have permission to access.
+                    > DBMS ; SQL -> DB server is down.
+
+
+=> Why to Handle Exceptions?
+* Separation of main logic code with the error handling code.
+* To avoid improper termination -> meaning ful message to our end user.
+
+
+=> Ways to deal / handle exceptions:
+1. Ignore it    -> improper termination, not meaningful
+2. Handle it where it is occuerd.           -> try, catch block handles it where it occured.
+3. Handle it somewhere else (on another location).      -> throws can throw exception from where it is occur to some other place, and it will handle at that some other location.
+
+
+=> Keywords to handle exceptions:
+* try
+* catch
+* finally
+* throws
+* throw
+
+
+Exceptions::
+~ Runtime error
+~ represents Errornous situation
+~ Wrapped in an object
+
+Whenever an excption comes, it is wrapped in an object, and these object can be of following classes:
+Checked Exception Classes (These classes are directly inherits from Exception Class) :
+--------------------------
+# ClassNotFoundException
+# IOException
+# AWTException
+# RunTimeException
+
+=> In CHECKED EXCEPTIONS, JAVA will force us to write handler code for the exception, if we do not write handler (catch-block) for the exceptions, then our code will not compile. (It means they are some sort of our programming syntax which we must have to write)
+~~ Checked Exceptions -> Compulsory -> external resource -> file, socket, DBMS, Threads.
+
+
+Unchecked Exception Classes (These classes are inherits from RunTimeException Class):
+----------------------------
+# Arithmetic exception
+# NullPointerException
+# IndexOutOfBoundException
+
+=> In UNCHECKED EXCEPTIONS, if we do not write handler (catch-block) for the exception, then java will provide itself handler for that exceptions. (JAVA will provide default handler, this handler displays jAVA built in messages for that exception like java.lang.ArithmeticException.{not user fiendly})
+~~ UnChecked Exceptions -> Optional -> Java -> default handler :: div, numbers conversions.
+
+
+-> All these exception classes are part of 'java.lang' package (which package is by default added by JAVA in our program) 
+-> This object represents of which type exception occur.
+
+-> One exception occur at one time in JAVA.
+
+// data[15] = 0
+// data[16] is unavailable
+try {
+    int res = data[16] / data[15];      // Exception
+
+    System.out.println("This line Not Executes...);     // This line will not executes.
+
+}catch (Exception ex) {
+    // Here IndexOutOfBoundException comes.
+    // So here only 1 exception occur IndexOutOfBound, and not ArithmeticException
+}
+
+
+-> When exception occur, the code will never come in try block again.
+try {
+    // file open        // if exception comes here
+    // reading          // it will not executes
+}catch (Exception ex) {
+    -------------
+}
+----------
+----------
+
+Homework...
+Q:: Can we have nested try-Catch block? (try-Catch block inside try block.)
+Ans:: Yes, we can have nested try catch blocks. They will executes in Top-Bootton sequence / approach.
+
+
+Q:: Which catch blocks executes in below?
+// Outer Catch block
+try {
+    // Inner Catch block
+    try {
+        // Here Number Format Exception comes -> Unchecked Exception
+
+    } catch (ArithmeticException ex) 
+    {
+
+    } catch (IOException ex) 
+    {
+
+    }
+} catch (Exception ex) {
+
+}
+
+ANS:: Possible Answers
+1. Here maybe because 'NumberFormatException' is checked , So Java will provide it's own handler for us as no inner catch block matches...
+
+2. CORRECT ANSWER:: Whenever inner catch block does not match, the control moves towards outer catch block (top-bottom).
+So, in above scenerio outer catch block executes...
+
+* But if exception does not match with outer catch block also, then if exception is 'Unchecked' then JAVA will provide us it's own handler for it, Otherwise if 'Checked' exception then we got ERROR, Java force us to provide us its handler.
+
+Q:: Which catch blocks executes in below?
+// Outer Catch block
+try {
+    // Inner Catch block
+    try {
+        // Here Number Format Exception comes -> Unchecked Exception
+
+    } catch (ArithmeticException ex) 
+    {
+
+    } catch (IOException ex) 
+    {
+
+    }
+} catch (IndexOutOfBoundException ex) // It also does not match
+{
+
+}
+
+So, java will provide us its own handler here.
+
+* But if inner and outer catch block both matches, then only inner will executes and it will bypass / skip all below catch blocks.
+
+*/
+

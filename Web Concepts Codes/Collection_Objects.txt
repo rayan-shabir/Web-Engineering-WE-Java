@@ -1,0 +1,71 @@
+Collection_Objects:: A container which contains different objects. (like STL in cpp). Object which contains different objects.
+
+JAVA provide us Collection objects like::
+-> ArrayList
+-> Vector
+-> HasMap
+* All these collection objects are like array, which store multiple objects. And all these are avilable in buil-in library of JAVA.
+java.util.*;
+
+
+=> ArrayList::
+================
+* Is a collection of objects which contains multiple objects.
+* It grows and shrink dynamically. (we don't need to mention size of ArrayList).
+
+ArrayList AL = new ArrayList();    -> Generic ArrayList (Stores multiple different type Objects of type Object[Student, Teacher, Employee, Person etc], it does not store int, float, char etc type varibales bcz they are not Object type (or there parent is not Object)).
+
+-> To ADD data is this ArrayList::
+AL.add(Object obj); //we are saving any object in form of Object class (which is parent of any JAVA class.)
+
+-> To GET any Object from this ArrayList::
+Object obj = AL.get(int index);  {0 - (size-1)} // it will return obj of type Object (which is parent of any JAVA class.)
+
+* But if we want to get obj in specific type which is it's original, then we need to downcast the returning object.
+Person p = (Person) AL.get(int index);  // downcasting
+
+-> To remove any Object from ArrayList::
+AL.remove(int index);
+
+-> To get size of any ArrayList::
+int size = AL.size();
+
+* Thus, type of this Generic ArrayList is Object, because every obj in it is type of Object (which is parent of every JAVA class.)
+
+Q3:: see in the end.
+
+NOTE:: 
+=> When we do this::
+ArrayList AL = new ArrayList();     // we get compile time warning at this stage in all JDK version > 5
+                                    WARNING:: The ArrayList we try to create here is in Unchecked mode. We are trying to do type Unsafe operation. JAVA reccomend us, to create ArrayList of type ArrayList, To create ArrayList in which all obejcts are of 1 specific type. (All are of Person, or Teacher, or Employee etc, 1 type only)
+
+* Thus, if we want to create type array list (of specific type)::
+ArrayList<Type> AL = new ArrayList<Type>();     // Now here, in this ArrayList only 1 specific type of objects can be stored which we 
+                                                mentioned here. Multiple different types of objects cannot be stored here in this.
+
+
+ArrayList<Person> AL = new ArrayList<Person>();     // Now this ArrayList is only capable to store multiple objects of only Person type. 
+
+Q4:: see in the end.
+
+LECTURE # 11, all questions
+
+Q3:: Identify / recognize different type of object and then downcast it in appropriate format.
+ANS:: // See code below:
+
+ArrayList AL = new ArrayList();
+loop(AL.length) {
+    Object obj = AL.get(int index);
+
+    if(obj is type of Person) Person p = (Person) obj;
+    if(obj is type of Teacher) Teacher t = (Teacher) obj;
+}
+
+Q4:: When we create ArrayList of 1 specific type, then does we also need to downcast while getting the object like:
+ArrayList<Person> AL = new ArrayList<Person>();
+
+Person obj = (Person) AL.get();
+OR NOT?
+Person obj = AL.get();
+
+ANS:: 
