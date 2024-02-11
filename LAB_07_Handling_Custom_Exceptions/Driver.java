@@ -34,7 +34,7 @@ class Health {
 
 }
 
-public class LAB_07_Prac {
+public class Driver {
     public Health arr;
 
     public void Save() throws nonPositiveException{
