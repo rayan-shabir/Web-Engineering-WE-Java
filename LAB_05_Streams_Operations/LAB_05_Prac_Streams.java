@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class LAB_05_Prac_Streams {
+public class Driver {
     public static void main(String args[]) {
         int count = 0;
         String file1;
