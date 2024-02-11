@@ -82,7 +82,7 @@ class AddressBook {
 }
 
 // DRIVER CLASS
-public class LAB_05_task {
+public class Driver {
     public static void main(String[] args) throws Exception{
         AddressBook ab = new AddressBook();
         Scanner inp = new Scanner(System.in);
