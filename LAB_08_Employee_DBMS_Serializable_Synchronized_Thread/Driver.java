@@ -218,7 +218,7 @@ class MyThread implements Runnable {
     }
 }
 
-public class LAB_08_prac {
+public class Driver {
     public static void main(String args[]) {
         Scanner inp = new Scanner(System.in);
         String choice;
